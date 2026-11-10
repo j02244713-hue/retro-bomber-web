@@ -80,7 +80,6 @@
             color: #ffcc00;
         }
     </style>
-    <!-- NOTE: O loader.js foi removido daqui para não rodar antes da hora! -->
 </head>
 <body>
 
@@ -102,40 +101,39 @@
 
     <script>
         document.getElementById('rom-file').addEventListener('change', function(e) {
-            const files = e.target.files;
-            if (!files || files.length === 0) return;
-            const file = files;
+            // Pegando estritamente o índice [0] (primeiro arquivo selecionado)
+            const file = e.target.files[0];
+            if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                document.getElementById('upload-label').style.display = 'none';
-                document.getElementById('game').style.display = 'block';
+            // Esconde o botão e libera a caixa do emulador
+            document.getElementById('upload-label').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
 
-                // 1. Primeiro criamos todas as variáveis que o loader.js exige
-                window.EJS_player = '#game';
-                window.EJS_core = 'snes';
-                window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
-                window.EJS_gameUrl = event.target.result;
-                
-                // Caminhos exatos dos seus arquivos locais no GitHub
-                window.EJS_pathtodata = 'data/';
-                window.EJS_style = 'emulator.min.css';
-                window.EJS_script = 'emulator.min.js';
+            // Cria um link direto na memória RAM do navegador para o arquivo
+            const romUrl = URL.createObjectURL(file);
 
-                // Configurações de execução (sem EJS_Language para evitar erro 404)
-                window.EJS_threads = false;
-                window.EJS_startOnLoaded = true;
-                window.EJS_Gamepad = true;
-                window.EJS_mouse = false;
-                window.EJS_color = '#ffcc00';
+            // 1. Configura as variáveis globais do EmulatorJS
+            window.EJS_player = '#game';
+            window.EJS_core = 'snes';
+            window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
+            window.EJS_gameUrl = romUrl;
+            
+            // Caminhos locais no seu repositório do GitHub
+            window.EJS_pathtodata = 'data/';
+            window.EJS_style = 'emulator.min.css';
+            window.EJS_script = 'emulator.min.js';
 
-                // 2. Agora injetamos o loader.js na página para ele iniciar o jogo automaticamente!
-                const script = document.createElement('script');
-                script.src = 'loader.js';
-                document.body.appendChild(script);
-            };
+            // Configurações de execução e controles
+            window.EJS_threads = false;
+            window.EJS_startOnLoaded = true;
+            window.EJS_Gamepad = true;
+            window.EJS_mouse = false;
+            window.EJS_color = '#ffcc00';
 
-            reader.readAsDataURL(file);
+            // 2. Injeta o loader.js para iniciar o emulador agora que tudo está pronto
+            const script = document.createElement('script');
+            script.src = 'loader.js';
+            document.body.appendChild(script);
         });
     </script>
 
