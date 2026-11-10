@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Super Bomberman 4 - Web Player</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+        h1 {
+            color: #ffcc00;
+            margin: 0 0 8px 0;
+            font-size: 1.8rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        .subtitle {
+            color: #bbbbbb;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-size: 0.95rem;
+            max-width: 600px;
+        }
+        #emulator-container {
+            width: 640px;
+            height: 480px;
+            max-width: 100%;
+            background: #000000;
+            border: 4px solid #ffcc00;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Ajuste automático de proporção para telas de celular */
+        @media (max-width: 680px) {
+            #emulator-container {
+                width: 95vw;
+                height: calc(95vw * 0.75);
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+        }
+        .upload-btn {
+            background-color: #ffcc00;
+            color: #121212;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
+        }
+        .upload-btn:hover {
+            background-color: #e6b800;
+            transform: scale(1.03);
+        }
+        .upload-btn:active {
+            transform: scale(0.98);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .controls-info {
+            margin-top: 20px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 20px;
+            max-width: 640px;
+            width: 100%;
+            font-size: 0.85rem;
+            color: #cccccc;
+            text-align: center;
+        }
+        .controls-info strong {
+            color: #ffcc00;
+        }
+    </style>
+    <!-- Carrega o script principal direto da sua pasta local 'data' -->
+    <script src="data/loader.js"></script>
+</head>
+<body>
+
+    <h1>💣 Super Bomberman 4 Web</h1>
+    <p class="subtitle">Selecione o arquivo da sua ROM (.sfc ou .smc) para jogar direto no navegador.</p>
+
+    <div id="emulator-container">
+        <label class="upload-btn" id="upload-label">
+            📂 Carregar ROM do SNES
+            <input type="file" id="rom-file" accept=".sfc,.smc,.zip">
+        </label>
+        <div id="game" style="width:100%; height:100%; display:none;"></div>
+    </div>
+
+    <div class="controls-info">
+        <strong>Controles:</strong> No <strong>Celular</strong>, use os botões na tela ou conecte um controle Bluetooth. No <strong>PC</strong>, use as setas + Z, X, A, S, Enter (ou conecte um controle USB). Clique no ícone de engrenagem no jogo para configurar teclas ou salvar.
+    </div>
+
+    <script>
+        document.getElementById('rom-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                // Esconde o botão e exibe a tela do emulador
+                document.getElementById('upload-label').style.display = 'none';
+                document.getElementById('game').style.display = 'block';
+
+                // Configurações Principais (100% Local)
+                window.EJS_player = '#game';
+                window.EJS_core = 'snes';
+                window.EJS_gameName = file.name.replace(/\.[^/.]+$/, ""); // Nome limpo para os Save States
+                window.EJS_gameUrl = event.target.result;
+                window.EJS_pathtodata = 'data/';
+
+                // Compatibilidade com GitHub Pages (desativa multi-thread bloqueado)
+                window.EJS_threads = false;
+
+                // Experiência do Usuário, Mobile & Controles
+                window.EJS_startOnLoaded = true;
+                window.EJS_Language = 'pt-BR';
+                window.EJS_Gamepad = true; // Suporte automático a controles sem fio/USB
+                window.EJS_mouse = false;
+                window.EJS_color = '#ffcc00'; // Tema amarelo combinando com a página
+
+                // Inicia o emulador
+                EJS_init();
+            };
+
+            reader.readAsDataURL(file);
+        });
+    </script>
+
+</body>
+</html>
