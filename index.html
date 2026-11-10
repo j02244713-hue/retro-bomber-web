@@ -5,31 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Super Bomberman 4 - Web Player</title>
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
         body {
-            background-color: #121212; color: #ffffff;
+            background-color: #121212;
+            color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100vh; margin: 0; padding: 15px; overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+            overflow-x: hidden;
         }
-        h1 { color: #ffcc00; margin: 0 0 8px 0; font-size: 1.8rem; text-align: center; }
-        .subtitle { color: #bbbbbb; margin: 0 0 20px 0; text-align: center; font-size: 0.95rem; }
+        h1 {
+            color: #ffcc00;
+            margin: 0 0 8px 0;
+            font-size: 1.8rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        .subtitle {
+            color: #bbbbbb;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-size: 0.95rem;
+            max-width: 600px;
+        }
         #emulator-container {
-            width: 640px; height: 480px; max-width: 100%; background: #000000;
-            border: 4px solid #ffcc00; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; position: relative;
+            width: 640px;
+            height: 480px;
+            max-width: 100%;
+            background: #000000;
+            border: 4px solid #ffcc00;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
-        @media (max-width: 680px) { #emulator-container { width: 95vw; height: calc(95vw * 0.75); } }
+        @media (max-width: 680px) {
+            #emulator-container {
+                width: 95vw;
+                height: calc(95vw * 0.75);
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+        }
         .upload-btn {
-            background-color: #ffcc00; color: #121212; padding: 16px 32px;
-            font-size: 1.1rem; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;
+            background-color: #ffcc00;
+            color: #121212;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
         }
-        input[type="file"] { display: none; }
-        .controls-info { margin-top: 20px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 12px 20px; max-width: 640px; width: 100%; font-size: 0.85rem; color: #cccccc; text-align: center; }
-        .controls-info strong { color: #ffcc00; }
+        .upload-btn:hover {
+            background-color: #e6b800;
+            transform: scale(1.03);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .controls-info {
+            margin-top: 20px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 20px;
+            max-width: 640px;
+            width: 100%;
+            font-size: 0.85rem;
+            color: #cccccc;
+            text-align: center;
+        }
+        .controls-info strong {
+            color: #ffcc00;
+        }
     </style>
-    <!-- Carrega o inicializador de dentro da pasta data local -->
-    <script src="data/loader.js"></script>
+    <!-- Inicializador estável via CDN para evitar o bloqueio de segurança do GitHub Pages -->
+    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
 
@@ -45,7 +112,8 @@
     </div>
 
     <div class="controls-info">
-        <strong>Controles:</strong> No <strong>Celular</strong>, use os botões na tela. No <strong>PC</strong>, use as setas + Z, X, A, S, Enter.
+        <strong>Controles PC:</strong> Setas Direcionais + Z, X, A, S e Enter.<br>
+        <strong>Controles Mobile:</strong> Botões virtuais automáticos na tela ao usar o celular.
     </div>
 
     <script>
@@ -59,24 +127,26 @@
                 document.getElementById('upload-label').style.display = 'none';
                 document.getElementById('game').style.display = 'block';
 
+                // Configurações do ambiente do emulador
                 window.EJS_player = '#game';
                 window.EJS_core = 'snes';
                 window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
                 window.EJS_gameUrl = event.target.result;
                 
-                // Rotas internas corrigidas para ler a pasta estruturada
-                window.EJS_pathtodata = 'data/';
-                window.EJS_style = 'data/emulator.min.css';
-                window.EJS_script = 'data/emulator.min.js';
+                // CDN estável configurada para servir os binários binários (.data) corretamente
+                window.EJS_pathtodata = 'https://jsdelivr.net';
 
+                // Configurações de execução e interface híbrida
                 window.EJS_threads = false;
                 window.EJS_startOnLoaded = true;
                 window.EJS_Language = 'pt-BR';
                 window.EJS_Gamepad = true;
                 window.EJS_mouse = false;
+                window.EJS_color = '#ffcc00';
 
                 EJS_init();
             };
+
             reader.readAsDataURL(file);
         });
     </script>
