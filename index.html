@@ -80,8 +80,7 @@
             color: #ffcc00;
         }
     </style>
-    <!-- Carrega o arquivo loader que está solto na raiz do seu GitHub -->
-    <script src="loader.js"></script>
+    <!-- NOTE: O loader.js foi removido daqui para não rodar antes da hora! -->
 </head>
 <body>
 
@@ -105,30 +104,35 @@
         document.getElementById('rom-file').addEventListener('change', function(e) {
             const files = e.target.files;
             if (!files || files.length === 0) return;
-            const file = files[0];
+            const file = files;
 
             const reader = new FileReader();
             reader.onload = function(event) {
                 document.getElementById('upload-label').style.display = 'none';
                 document.getElementById('game').style.display = 'block';
 
+                // 1. Primeiro criamos todas as variáveis que o loader.js exige
                 window.EJS_player = '#game';
                 window.EJS_core = 'snes';
                 window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
                 window.EJS_gameUrl = event.target.result;
                 
-                // Força o sistema a ler a sua própria estrutura do GitHub (Pasta data raiz)
+                // Caminhos exatos dos seus arquivos locais no GitHub
                 window.EJS_pathtodata = 'data/';
                 window.EJS_style = 'emulator.min.css';
                 window.EJS_script = 'emulator.min.js';
 
+                // Configurações de execução (sem EJS_Language para evitar erro 404)
                 window.EJS_threads = false;
                 window.EJS_startOnLoaded = true;
-                window.EJS_Language = 'pt-BR';
                 window.EJS_Gamepad = true;
                 window.EJS_mouse = false;
+                window.EJS_color = '#ffcc00';
 
-                EJS_init();
+                // 2. Agora injetamos o loader.js na página para ele iniciar o jogo automaticamente!
+                const script = document.createElement('script');
+                script.src = 'loader.js';
+                document.body.appendChild(script);
             };
 
             reader.readAsDataURL(file);
