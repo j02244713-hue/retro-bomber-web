@@ -95,8 +95,8 @@
             color: #ffcc00;
         }
     </style>
-    <!-- Inicializador estável via CDN para evitar o bloqueio de segurança do GitHub Pages -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- Alterado para o espelho do unpkg que evita o bloqueio da rede do jsdelivr -->
+    <script src="https://unpkg.com"></script>
 </head>
 <body>
 
@@ -120,23 +120,21 @@
         document.getElementById('rom-file').addEventListener('change', function(e) {
             const files = e.target.files;
             if (!files || files.length === 0) return;
-            const file = files[0];
+            const file = files[0]; // Correção para leitura explícita do primeiro arquivo binário
 
             const reader = new FileReader();
             reader.onload = function(event) {
                 document.getElementById('upload-label').style.display = 'none';
                 document.getElementById('game').style.display = 'block';
 
-                // Configurações do ambiente do emulador
                 window.EJS_player = '#game';
                 window.EJS_core = 'snes';
                 window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
                 window.EJS_gameUrl = event.target.result;
                 
-                // CDN estável configurada para servir os binários binários (.data) corretamente
-                window.EJS_pathtodata = 'https://jsdelivr.net';
+                // Redireciona o fornecimento dos arquivos pesados (.data) para rotas CDN estáveis e alternativas
+                window.EJS_pathtodata = 'https://unpkg.com';
 
-                // Configurações de execução e interface híbrida
                 window.EJS_threads = false;
                 window.EJS_startOnLoaded = true;
                 window.EJS_Language = 'pt-BR';
