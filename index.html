@@ -26,14 +26,12 @@
             margin: 0 0 8px 0;
             font-size: 1.8rem;
             text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
         .subtitle {
             color: #bbbbbb;
             margin: 0 0 20px 0;
             text-align: center;
             font-size: 0.95rem;
-            max-width: 600px;
         }
         #emulator-container {
             width: 640px;
@@ -42,21 +40,15 @@
             background: #000000;
             border: 4px solid #ffcc00;
             border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
         }
         @media (max-width: 680px) {
             #emulator-container {
                 width: 95vw;
                 height: calc(95vw * 0.75);
-            }
-            h1 {
-                font-size: 1.4rem;
             }
         }
         .upload-btn {
@@ -68,13 +60,6 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            transition: transform 0.1s, background-color 0.2s;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
-        }
-        .upload-btn:hover {
-            background-color: #e6b800;
-            transform: scale(1.03);
         }
         input[type="file"] {
             display: none;
@@ -95,8 +80,8 @@
             color: #ffcc00;
         }
     </style>
-    <!-- Alterado para o espelho do unpkg que evita o bloqueio da rede do jsdelivr -->
-    <script src="https://unpkg.com"></script>
+    <!-- Carrega o arquivo loader que está solto na raiz do seu GitHub -->
+    <script src="loader.js"></script>
 </head>
 <body>
 
@@ -113,14 +98,14 @@
 
     <div class="controls-info">
         <strong>Controles PC:</strong> Setas Direcionais + Z, X, A, S e Enter.<br>
-        <strong>Controles Mobile:</strong> Botões virtuais automáticos na tela ao usar o celular.
+        <strong>Controles Mobile:</strong> Botões virtuais na tela ao usar o celular.
     </div>
 
     <script>
         document.getElementById('rom-file').addEventListener('change', function(e) {
             const files = e.target.files;
             if (!files || files.length === 0) return;
-            const file = files[0]; // Correção para leitura explícita do primeiro arquivo binário
+            const file = files[0];
 
             const reader = new FileReader();
             reader.onload = function(event) {
@@ -132,15 +117,16 @@
                 window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
                 window.EJS_gameUrl = event.target.result;
                 
-                // Redireciona o fornecimento dos arquivos pesados (.data) para rotas CDN estáveis e alternativas
-                window.EJS_pathtodata = 'https://unpkg.com';
+                // Força o sistema a ler a sua própria estrutura do GitHub (Pasta data raiz)
+                window.EJS_pathtodata = 'data/';
+                window.EJS_style = 'emulator.min.css';
+                window.EJS_script = 'emulator.min.js';
 
                 window.EJS_threads = false;
                 window.EJS_startOnLoaded = true;
                 window.EJS_Language = 'pt-BR';
                 window.EJS_Gamepad = true;
                 window.EJS_mouse = false;
-                window.EJS_color = '#ffcc00';
 
                 EJS_init();
             };
