@@ -26,12 +26,14 @@
             margin: 0 0 8px 0;
             font-size: 1.8rem;
             text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
         .subtitle {
             color: #bbbbbb;
             margin: 0 0 20px 0;
             text-align: center;
             font-size: 0.95rem;
+            max-width: 600px;
         }
         #emulator-container {
             width: 640px;
@@ -40,10 +42,12 @@
             background: #000000;
             border: 4px solid #ffcc00;
             border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden;
         }
         @media (max-width: 680px) {
             #emulator-container {
@@ -64,10 +68,14 @@
             border-radius: 6px;
             cursor: pointer;
             transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
         }
         .upload-btn:hover {
             background-color: #e6b800;
             transform: scale(1.03);
+        }
+        .upload-btn:active {
+            transform: scale(0.98);
         }
         input[type="file"] {
             display: none;
@@ -135,10 +143,11 @@
 
     <div class="controls-info">
         <strong>🌐 Como Jogar Online (Netplay):</strong><br>
-        1. Após carregar o jogo, passe o mouse na parte inferior da tela (ou toque no menu no celular).<br>
-        2. Clique no ícone de <strong>Rede / Netplay</strong> (globo ou controle conectado).<br>
-        3. Crie uma sala com senha ou entre na sala de um amigo (ambos precisam usar a <strong>mesma ROM</strong>).<br><br>
-        <strong>Controles:</strong> PC (Setas + Z, X, A, S, Enter) | Mobile (Botões na tela ou Bluetooth).
+        1. Após iniciar o jogo, toque na parte inferior da tela (ou passe o mouse no PC).<br>
+        2. Clique no ícone de <strong>Rede / Netplay</strong> para criar uma sala ou entrar na sala de um amigo.<br>
+        3. Importante: Todos na sala precisam carregar exatamente a <strong>mesma ROM</strong>.<br><br>
+        <strong>Controles:</strong> PC (Setas + Z, X, A, S, Enter ou USB) | Celular (Botões na tela ou Bluetooth).<br>
+        <em>Dica Mobile: Se abriu pelo app do YouTube, toque nos três pontinhos e escolha "Abrir no Chrome/Safari".</em>
     </div>
 
     <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="yt-btn">
@@ -152,34 +161,40 @@
 
     <script>
         document.getElementById('rom-file').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+            const files = e.target.files;
+            if (!files || files.length === 0) return;
+            const file = files[0];
 
+            // Alterna o botão para a tela do emulador
             document.getElementById('upload-label').style.display = 'none';
             document.getElementById('game').style.display = 'block';
 
+            // Lê o arquivo direto da memória RAM sem travar o navegador
             const romUrl = URL.createObjectURL(file);
 
+            // Configurações Principais do EmulatorJS
             window.EJS_player = '#game';
             window.EJS_core = 'snes';
             window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
             window.EJS_gameUrl = romUrl;
             
+            // Caminhos locais validados no repositório do GitHub
             window.EJS_pathtodata = 'data/';
             window.EJS_style = 'emulator.min.css';
             window.EJS_script = 'emulator.min.js';
 
-            // 🌐 ATIVAÇÃO DO MULTIPLAYER ONLINE (NETPLAY)
-            window.EJS_gameID = 404; // ID único da sala para agrupar jogadores do seu site
-            // Troque o link antigo pelo endereço do seu servidor exclusivo:
-window.EJS_netplayUrl = 'https://onrender.com'; // Servidor público de pareamento
+            // Conexão com o seu servidor próprio de Netplay no Render
+            window.EJS_gameID = 404;
+            window.EJS_netplayUrl = 'https://bomberman-netplay-server.onrender.com/';
 
+            // Configurações de compatibilidade e controles
             window.EJS_threads = false;
             window.EJS_startOnLoaded = true;
             window.EJS_Gamepad = true;
             window.EJS_mouse = false;
             window.EJS_color = '#ffcc00';
 
+            // Injeta o loader.js somente após todas as variáveis estarem prontas
             const script = document.createElement('script');
             script.src = 'loader.js';
             document.body.appendChild(script);
