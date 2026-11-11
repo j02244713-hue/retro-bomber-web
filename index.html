@@ -144,7 +144,7 @@
     <div class="controls-info">
         <strong>🌐 Como Jogar Online (Netplay):</strong><br>
         1. Após iniciar o jogo, toque na parte inferior da tela (ou passe o mouse no PC).<br>
-        2. Clique no ícone de <strong>Rede / Netplay</strong> para criar uma sala ou entrar na sala de um amigo.<br>
+        2. Clique no ícone de <strong>Rede / Netplay (Globo)</strong> para criar uma sala ou entrar na sala de um amigo.<br>
         3. Importante: Todos na sala precisam carregar exatamente a <strong>mesma ROM</strong>.<br><br>
         <strong>Controles:</strong> PC (Setas + Z, X, A, S, Enter ou USB) | Celular (Botões na tela ou Bluetooth).<br>
         <em>Dica Mobile: Se abriu pelo app do YouTube, toque nos três pontinhos e escolha "Abrir no Chrome/Safari".</em>
@@ -165,36 +165,35 @@
             if (!files || files.length === 0) return;
             const file = files[0];
 
-            // Alterna o botão para a tela do emulador
             document.getElementById('upload-label').style.display = 'none';
             document.getElementById('game').style.display = 'block';
 
-            // Lê o arquivo direto da memória RAM sem travar o navegador
             const romUrl = URL.createObjectURL(file);
 
-            // Configurações Principais do EmulatorJS
             window.EJS_player = '#game';
             window.EJS_core = 'snes';
             window.EJS_gameName = file.name.replace(/\.[^/.]+$/, "");
             window.EJS_gameUrl = romUrl;
             
-            // Caminhos locais validados no repositório do GitHub
             window.EJS_pathtodata = 'data/';
             window.EJS_style = 'emulator.min.css';
             window.EJS_script = 'emulator.min.js';
 
-            // Conexão com o seu servidor próprio de Netplay no Render
+            // 🌐 CONFIGURAÇÃO OFICIAL DO MULTIPLAYER ONLINE (NETPLAY)
             window.EJS_gameID = 404;
-            window.EJS_netplayUrl = 'https://bomberman-netplay-server.onrender.com/';
+            window.EJS_netplayServer = 'https://bomberman-netplay-server.onrender.com/';
+            window.EJS_netplayICEServers = [
+                { urls: 'stun:://google.com' },
+                { urls: 'stun:://google.com' },
+                { urls: 'stun:://google.com' }
+            ];
 
-            // Configurações de compatibilidade e controles
             window.EJS_threads = false;
             window.EJS_startOnLoaded = true;
             window.EJS_Gamepad = true;
             window.EJS_mouse = false;
             window.EJS_color = '#ffcc00';
 
-            // Injeta o loader.js somente após todas as variáveis estarem prontas
             const script = document.createElement('script');
             script.src = 'loader.js';
             document.body.appendChild(script);
