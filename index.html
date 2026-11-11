@@ -159,16 +159,15 @@
         <div id="game" style="width:100%; height:100%; display:none;"></div>
     </div>
 
-    <!-- Botão dedicado para abrir as salas online -->
     <button id="open-netplay-btn" class="netplay-btn" onclick="abrirMenuOnline()">
         🌐 Jogar Online (Criar / Entrar na Sala)
     </button>
 
     <div class="controls-info">
         <strong>🌐 Como Jogar Online (Netplay):</strong><br>
-        1. Após iniciar o jogo, clique no botão azul acima para abrir as salas.<br>
-        2. Crie uma sala com senha ou entre na sala de um amigo.<br>
-        3. Importante: Todos na sala precisam carregar exatamente a <strong>mesma ROM</strong>.<br><br>
+        1. Clique no botão azul acima para abrir o menu de salas.<br>
+        2. Crie uma sala (você será o Jogador 1) ou entre na sala criada por um amigo.<br>
+        3. Importante: Todos na sala precisam usar exatamente a <strong>mesma ROM</strong>.<br><br>
         <strong>Controles:</strong> PC (Setas + Z, X, A, S, Enter ou USB) | Celular (Botões na tela ou Bluetooth).<br>
         <em>Dica Mobile: Se abriu pelo app do YouTube, toque nos três pontinhos e escolha "Abrir no Chrome/Safari".</em>
     </div>
@@ -190,8 +189,6 @@
 
             document.getElementById('upload-label').style.display = 'none';
             document.getElementById('game').style.display = 'block';
-            
-            // Exibe o botão azul do Netplay logo abaixo da tela
             document.getElementById('open-netplay-btn').style.display = 'inline-block';
 
             const romUrl = URL.createObjectURL(file);
@@ -205,16 +202,14 @@
             window.EJS_style = 'emulator.min.css';
             window.EJS_script = 'emulator.min.js';
 
-            // Configuração oficial do Multiplayer Online
-                        window.EJS_gameID = 404;
-            window.EJS_netplayServer = 'https://netplay.emulatorjs.org';
+            // Servidor Oficial Público (Zero espera, ideal para lives e gravações)
+            window.EJS_gameID = 404;
+            window.EJS_netplayServer = 'https://emulatorjs.org';
             window.EJS_netplayICEServers = [
                 { urls: 'stun:://google.com' },
                 { urls: 'stun:://google.com' },
-                { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-                { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' }
+                { urls: 'stun:://google.com' }
             ];
-
 
             window.EJS_threads = false;
             window.EJS_startOnLoaded = true;
@@ -227,7 +222,6 @@
             document.body.appendChild(script);
         });
 
-        // Função atualizada que localiza o elemento real do EmulatorJS
         function abrirMenuOnline() {
             const btnNetplay = document.querySelector('.ejs_netplay_button, [data-btn="netplay"]');
             if (btnNetplay) {
