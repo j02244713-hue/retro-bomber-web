@@ -81,7 +81,7 @@
             display: none;
         }
         .netplay-btn {
-            display: none; /* Aparece automaticamente após carregar o jogo */
+            display: none;
             margin-top: 15px;
             background-color: #0088ff;
             color: #ffffff;
@@ -207,7 +207,7 @@
 
             // Configuração oficial do Multiplayer Online
             window.EJS_gameID = 404;
-            window.EJS_netplayServer = 'https://bomberman-netplay-server.onrender.com/';
+            window.EJS_netplayServer = 'https://onrender.com';
             window.EJS_netplayICEServers = [
                 { urls: 'stun:://google.com' },
                 { urls: 'stun:://google.com' },
@@ -225,30 +225,28 @@
             document.body.appendChild(script);
         });
 
-                // Função atualizada que localiza a barra inferior e clica no 5º ícone (Netplay)
+        // Função atualizada que localiza o elemento real do EmulatorJS
         function abrirMenuOnline() {
-            // Procura todos os botões dentro da barra de menu do emulador
-            const botoesBarra = document.querySelectorAll('#game button, .ejs_menu_bar button');
-            
-            // O botão de Netplay é o 5º ícone (índice 4 na contagem que começa do zero)
-            if (botoesBarra && botoesBarra.length >= 5) {
-                botoesBarra.click();
-            } else {
-                // Plano B: busca por qualquer botão que tenha o texto ou título de Netplay
-                const todosBotoes = Array.from(document.querySelectorAll('button'));
-                const btnRede = todosBotoes.find(b => 
-                    (b.title && b.title.toLowerCase().includes('netplay')) || 
-                    (b.innerHTML && b.innerHTML.toLowerCase().includes('netplay'))
-                );
-                
-                if (btnRede) {
-                    btnRede.click();
-                } else {
-                    alert('Passe o mouse na parte inferior da tela do jogo e clique no 5º ícone (duas setas conectadas) para abrir o Netplay!');
+            const btnNetplay = document.querySelector('.ejs_netplay_button, [data-btn="netplay"]');
+            if (btnNetplay) {
+                btnNetplay.click();
+                return;
+            }
+
+            const elementos = document.querySelectorAll('#game *');
+            for (let el of elementos) {
+                if (el.textContent && el.textContent.trim().toLowerCase() === 'netplay') {
+                    el.click();
+                    return;
                 }
             }
-        }
 
+            const telaJogo = document.querySelector('#game');
+            if (telaJogo) {
+                telaJogo.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
+                alert('A barra inferior do emulador foi exibida! Clique no 5º ícone (duas setas em loop) na parte de baixo da tela.');
+            }
+        }
     </script>
 
 </body>
