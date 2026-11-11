@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Super Bomberman 4 - Web Player</title>
+    <title>Super Bomberman 4 - Web Player Online</title>
     <style>
         * {
             box-sizing: border-box;
@@ -77,13 +77,13 @@
             background: #1e1e1e;
             border: 1px solid #333;
             border-radius: 8px;
-            padding: 12px 20px;
+            padding: 14px 20px;
             max-width: 640px;
             width: 100%;
             font-size: 0.85rem;
             color: #cccccc;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         .controls-info strong {
             color: #ffcc00;
@@ -123,7 +123,7 @@
 <body>
 
     <h1>💣 Super Bomberman 4 Web</h1>
-    <p class="subtitle">Selecione o arquivo da sua ROM (.sfc ou .smc) para jogar direto no navegador.</p>
+    <p class="subtitle">Selecione o arquivo da sua ROM (.sfc ou .smc) para jogar offline ou online.</p>
 
     <div id="emulator-container">
         <label class="upload-btn" id="upload-label">
@@ -134,9 +134,11 @@
     </div>
 
     <div class="controls-info">
-        <strong>Controles PC:</strong> Setas Direcionais + Z, X, A, S e Enter (ou controle USB).<br>
-        <strong>Controles Mobile:</strong> Botões virtuais na tela ou controle Bluetooth.<br>
-        <em>Dica para celular: Se abriu pelo app do YouTube, toque nos três pontinhos e escolha "Abrir no Chrome/Safari".</em>
+        <strong>🌐 Como Jogar Online (Netplay):</strong><br>
+        1. Após carregar o jogo, passe o mouse na parte inferior da tela (ou toque no menu no celular).<br>
+        2. Clique no ícone de <strong>Rede / Netplay</strong> (globo ou controle conectado).<br>
+        3. Crie uma sala com senha ou entre na sala de um amigo (ambos precisam usar a <strong>mesma ROM</strong>).<br><br>
+        <strong>Controles:</strong> PC (Setas + Z, X, A, S, Enter) | Mobile (Botões na tela ou Bluetooth).
     </div>
 
     <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="yt-btn">
@@ -166,6 +168,10 @@
             window.EJS_pathtodata = 'data/';
             window.EJS_style = 'emulator.min.css';
             window.EJS_script = 'emulator.min.js';
+
+            // 🌐 ATIVAÇÃO DO MULTIPLAYER ONLINE (NETPLAY)
+            window.EJS_gameID = 404; // ID único da sala para agrupar jogadores do seu site
+            window.EJS_netplayUrl = 'https://emulatorjs.org'; // Servidor público de pareamento
 
             window.EJS_threads = false;
             window.EJS_startOnLoaded = true;
