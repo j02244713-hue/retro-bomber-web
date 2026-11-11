@@ -206,13 +206,15 @@
             window.EJS_script = 'emulator.min.js';
 
             // Configuração oficial do Multiplayer Online
-            window.EJS_gameID = 404;
-            window.EJS_netplayServer = 'https://bomberman-netplay-server.onrender.com/';
+                        window.EJS_gameID = 404;
+            window.EJS_netplayServer = 'https://onrender.com';
             window.EJS_netplayICEServers = [
                 { urls: 'stun:://google.com' },
                 { urls: 'stun:://google.com' },
-                { urls: 'stun:://google.com' }
+                { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+                { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' }
             ];
+
 
             window.EJS_threads = false;
             window.EJS_startOnLoaded = true;
