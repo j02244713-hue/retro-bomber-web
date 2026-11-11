@@ -225,15 +225,30 @@
             document.body.appendChild(script);
         });
 
-        // Função que aciona o botão interno de Netplay do emulador
+                // Função atualizada que localiza a barra inferior e clica no 5º ícone (Netplay)
         function abrirMenuOnline() {
-            const netplayIcon = document.querySelector('[data-btn="netplay"]');
-            if (netplayIcon) {
-                netplayIcon.click();
+            // Procura todos os botões dentro da barra de menu do emulador
+            const botoesBarra = document.querySelectorAll('#game button, .ejs_menu_bar button');
+            
+            // O botão de Netplay é o 5º ícone (índice 4 na contagem que começa do zero)
+            if (botoesBarra && botoesBarra.length >= 5) {
+                botoesBarra.click();
             } else {
-                alert('Aguarde o jogo terminar de carregar para abrir o menu online!');
+                // Plano B: busca por qualquer botão que tenha o texto ou título de Netplay
+                const todosBotoes = Array.from(document.querySelectorAll('button'));
+                const btnRede = todosBotoes.find(b => 
+                    (b.title && b.title.toLowerCase().includes('netplay')) || 
+                    (b.innerHTML && b.innerHTML.toLowerCase().includes('netplay'))
+                );
+                
+                if (btnRede) {
+                    btnRede.click();
+                } else {
+                    alert('Passe o mouse na parte inferior da tela do jogo e clique no 5º ícone (duas setas conectadas) para abrir o Netplay!');
+                }
             }
         }
+
     </script>
 
 </body>
