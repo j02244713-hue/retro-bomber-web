@@ -80,8 +80,26 @@
         input[type="file"] {
             display: none;
         }
+        .netplay-btn {
+            display: none; /* Aparece automaticamente após carregar o jogo */
+            margin-top: 15px;
+            background-color: #0088ff;
+            color: #ffffff;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(0, 136, 255, 0.3);
+        }
+        .netplay-btn:hover {
+            background-color: #0066cc;
+            transform: scale(1.03);
+        }
         .controls-info {
-            margin-top: 20px;
+            margin-top: 18px;
             background: #1e1e1e;
             border: 1px solid #333;
             border-radius: 8px;
@@ -141,10 +159,15 @@
         <div id="game" style="width:100%; height:100%; display:none;"></div>
     </div>
 
+    <!-- Botão dedicado para abrir as salas online -->
+    <button id="open-netplay-btn" class="netplay-btn" onclick="abrirMenuOnline()">
+        🌐 Jogar Online (Criar / Entrar na Sala)
+    </button>
+
     <div class="controls-info">
         <strong>🌐 Como Jogar Online (Netplay):</strong><br>
-        1. Após iniciar o jogo, toque na parte inferior da tela (ou passe o mouse no PC).<br>
-        2. Clique no ícone de <strong>Rede / Netplay (Globo)</strong> para criar uma sala ou entrar na sala de um amigo.<br>
+        1. Após iniciar o jogo, clique no botão azul acima para abrir as salas.<br>
+        2. Crie uma sala com senha ou entre na sala de um amigo.<br>
         3. Importante: Todos na sala precisam carregar exatamente a <strong>mesma ROM</strong>.<br><br>
         <strong>Controles:</strong> PC (Setas + Z, X, A, S, Enter ou USB) | Celular (Botões na tela ou Bluetooth).<br>
         <em>Dica Mobile: Se abriu pelo app do YouTube, toque nos três pontinhos e escolha "Abrir no Chrome/Safari".</em>
@@ -167,6 +190,9 @@
 
             document.getElementById('upload-label').style.display = 'none';
             document.getElementById('game').style.display = 'block';
+            
+            // Exibe o botão azul do Netplay logo abaixo da tela
+            document.getElementById('open-netplay-btn').style.display = 'inline-block';
 
             const romUrl = URL.createObjectURL(file);
 
@@ -179,9 +205,9 @@
             window.EJS_style = 'emulator.min.css';
             window.EJS_script = 'emulator.min.js';
 
-            // 🌐 CONFIGURAÇÃO OFICIAL DO MULTIPLAYER ONLINE (NETPLAY)
+            // Configuração oficial do Multiplayer Online
             window.EJS_gameID = 404;
-            window.EJS_netplayServer = 'https://bomberman-netplay-server.onrender.com/';
+            window.EJS_netplayServer = 'https://onrender.com';
             window.EJS_netplayICEServers = [
                 { urls: 'stun:://google.com' },
                 { urls: 'stun:://google.com' },
@@ -198,6 +224,16 @@
             script.src = 'loader.js';
             document.body.appendChild(script);
         });
+
+        // Função que aciona o botão interno de Netplay do emulador
+        function abrirMenuOnline() {
+            const netplayIcon = document.querySelector('[data-btn="netplay"]');
+            if (netplayIcon) {
+                netplayIcon.click();
+            } else {
+                alert('Aguarde o jogo terminar de carregar para abrir o menu online!');
+            }
+        }
     </script>
 
 </body>
