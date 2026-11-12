@@ -202,15 +202,27 @@
             window.EJS_style = 'emulator.min.css';
             window.EJS_script = 'emulator.min.js';
 
-            // Conexão com o seu novo Servidor Python no Render (sem barra no final)
+            // Conexão com o seu Servidor Python no Render + Ponte TURN (Anti-Bloqueio de Rede Local/4G)
             window.EJS_gameID = 404;
-            window.EJS_netplayServer = 'https://bomberman-netplay-server.onrender.com';
+            window.EJS_netplayServer = 'https://onrender.com';
             window.EJS_netplayICEServers = [
                 { urls: 'stun:://google.com' },
                 { urls: 'stun:://google.com' },
-                { urls: 'stun:://google.com' },
-                { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-                { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' }
+                {
+                    urls: 'turn:openrelay.metered.ca:80',
+                    username: 'openrelayproject',
+                    credential: 'openrelayproject'
+                },
+                {
+                    urls: 'turn:openrelay.metered.ca:443',
+                    username: 'openrelayproject',
+                    credential: 'openrelayproject'
+                },
+                {
+                    urls: 'turns:openrelay.metered.ca:443?transport=tcp',
+                    username: 'openrelayproject',
+                    credential: 'openrelayproject'
+                }
             ];
 
             window.EJS_threads = false;
